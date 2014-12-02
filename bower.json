@@ -1,0 +1,24 @@
+{
+  "name": "angular-chartjs-pie-directive",
+  "main": "angular-chartjs-pie-directive.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/angular-directives/angular-chartjs-pie-directive",
+  "authors": [
+    "Stephane Begaudeau <stephane.begaudeau@obeo.fr>"
+  ],
+  "keywords": [
+    "chartjs"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chartjs": "~0.2.0"
+  }
+}
