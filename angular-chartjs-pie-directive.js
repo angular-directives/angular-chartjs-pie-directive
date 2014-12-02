@@ -5,6 +5,88 @@
  * Released under the MIT license
  */
 angular.module('angular.directives-chartjs-pie', []).directive('angChartjsPie', [function () {
+  var getOptionsFromScope = function (scope) {
+    var options = {};
+
+    var potentialOptions = [
+      {key:'chartjsSegmentShowStroke', value:'segmentShowStroke', isBoolean: true},
+      {key:'chartjsSegmentStrokeColor', value:'segmentStrokeColor'},
+      {key:'chartjsSegmentStrokeWidth', value:'segmentStrokeWidth', isNumber: true},
+      {key:'chartjsAnimation', value:'animation', isBoolean: true},
+      {key:'chartjsAnimationSteps', value:'animationSteps', isNumber: true},
+      {key:'chartjsAnimationEasing', value:'animationEasing'},
+      {key:'chartjAnimationRotate', value:'animationRotate', isBoolean: true},
+      {key:'chartjsAnimationScale', value:'animationScale', isBoolean: true}
+    ];
+
+    for (var i = 0; i < potentialOptions.length; i++) {
+      if (scope.hasOwnProperty(potentialOptions[i].key) && scope[potentialOptions[i].key] !== undefined) {
+        options[potentialOptions[i].value] = scope[potentialOptions[i].key];
+      }
+    }
+
+    return options;
+  };
+
+  var chartjsPie = {
+    restrict: 'E',
+    //compile: compilationFunction,
+    template: '<canvas class="ang-chartjs-pie"></canvas>',
+    scope: {
+      chartjsModel: '=',
+      chartjsWidth: '=',
+      chartjsHeight: '=',
+      chartjsSegmentShowStroke: '=',
+      chartjsSegmentStrokeColor: '=',
+      chartjsSegmentStrokeWidth: '=',
+      chartjsAnimation: '=',
+      chartjsAnimationSteps: '=',
+      chartjsAnimationEasing: '=',
+      chartjAnimationRotate: '=',
+      chartjsAnimationScale: '='
+    },
+    link: function (scope, elements, attributes) {
+      scope.$watch('chartjsModel', function (newValue) {
+        if (newValue !== undefined) {
+          var options = getOptionsFromScope(scope);
+
+          if (scope.chart !== undefined) {
+            scope.chart.Pie(newValue, options);
+          } else {
+            var width = scope.chartjsWidth || '400';
+            var height = scope.chartjsHeight || '400';
+
+            var canvas = elements[0].children[0];
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+
+            var chart = new Chart(canvas.getContext('2d'));
+            chart.Pie(newValue, options);
+            scope.chart = chart;
+          }
+        }
+      }, true);
+    }
+  };
+  return chartjsPie;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   var compilationFunction = function (templateElement, templateAttributes, transclude) {
     if (templateElement.length === 1) {
       var node = templateElement[0];
@@ -20,14 +102,7 @@ angular.module('angular.directives-chartjs-pie', []).directive('angChartjsPie', 
       var options = {};
 
       var potentialOptions = [
-        {key:'data-chartjs-segment-show-stroke', value:'segmentShowStroke', isBoolean: true},
-        {key:'data-chartjs-segment-stroke-color', value:'segmentStrokeColor'},
-        {key:'data-chartjs-segment-stroke-width', value:'segmentStrokeWidth', isNumber: true},
-        {key:'data-chartjs-animation', value:'animation', isBoolean: true},
-        {key:'data-chartjs-animation-steps', value:'animationSteps', isNumber: true},
-        {key:'data-chartjs-animation-easing', value:'animationEasing'},
-        {key:'data-chartjs-animation-rotate', value:'animationRotate', isBoolean: true},
-        {key:'data-chartjs-animation-scale', value:'animationScale', isBoolean: true}
+
       ];
 
       for (var i = 0; i < potentialOptions.length; i++) {
